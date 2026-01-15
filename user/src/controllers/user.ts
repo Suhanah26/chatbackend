@@ -5,7 +5,6 @@ import { redisClient } from "../index.js";
 import { User } from "../model/userModel.js";
 import { generateToken } from "../config/generateToken.js";
 import type { AuthenticatedRequest } from "../middleWare/isAuth.js";
-import { UserCheck } from "lucide-react";
 export const loginUser = TryCatch(async (req, res) => {
   console.log(req.body, " req.body");
   const { email } = req.body;
