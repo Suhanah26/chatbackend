@@ -1,9 +1,9 @@
-import amqp from "amqplib";
-let channel: amqp.Channel;
+import amql from "amqplib";
+let channel: amql.Channel;
 // in this channel we are fdoing queue
 export const connectRabbitMQ = async () => {
   try {
-    const connection = await amqp.connect({
+    const connection = await amql.connect({
       protocol: "amqp",
       hostname: process.env.Rabbitmq_Host,
       port: 5672,
