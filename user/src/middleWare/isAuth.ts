@@ -1,13 +1,11 @@
-import jwt, { type JwtPayload } from "jsonwebtoken";
-import dotenv from "dotenv";
-import TryCatch from "../config/tryCatch.js";
-import type { IUser } from "../model/userModel.js";
-import type { NextFunction } from "express-serve-static-core";
-import type { Request, Response } from "express";
-dotenv.config();
+import { NextFunction, Request, Response } from "express";
+import { IUser } from "../model/User.js";
+import jwt, { JwtPayload } from "jsonwebtoken";
+
 export interface AuthenticatedRequest extends Request {
   user?: IUser | null;
 }
+
 export const isAuth = async (
   req: AuthenticatedRequest,
   res: Response,
@@ -15,25 +13,34 @@ export const isAuth = async (
 ): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      res.status(401).json({ message: "No token provided" });
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      res.status(401).json({
+        message: "Please Login - No auth header",
+      });
       return;
     }
-    const token = authHeader?.split(" ")[1] as string;
-    // const storedToken = process.env.JwtToken as string;
-    const decodedUser = jwt.verify(
+
+    const token = authHeader.split(" ")[1];
+
+    const decodedValue = jwt.verify(
       token,
-      process.env.JwtToken as string
+      process.env.JWT_SECRET as string
     ) as JwtPayload;
-    console.log(decodedUser, "decodedUser");
-    if (!decodedUser || !decodedUser?.user) {
-      res.status(401).json({ message: "authentication failed,invalid token " });
+
+    if (!decodedValue || !decodedValue.user) {
+      res.status(401).json({
+        message: "Invalid token",
+      });
       return;
     }
-    req.user = decodedUser.user;
+
+    req.user = decodedValue.user;
+
     next();
   } catch (error) {
-    res.status(401).json({ message: "jwt token code error" });
-    console.log(error);
+    res.status(401).json({
+      message: "Please Login - JWT error",
+    });
   }
 };

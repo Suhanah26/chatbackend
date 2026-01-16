@@ -1,9 +1,13 @@
 import express from "express";
 import dotenv from "dotenv";
-import { startsendOTPConsumer } from "./consumer.js";
+import { startSendOtpConsumer } from "./consumer.js";
+
 dotenv.config();
-startsendOTPConsumer()
+
+startSendOtpConsumer();
+
 const app = express();
+
 app.listen(process.env.PORT, () => {
-  console.log(`listening to ${process.env.PORT} `);
+  console.log(`Server is running on port ${process.env.PORT}`);
 });

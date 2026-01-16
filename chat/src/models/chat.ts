@@ -6,9 +6,11 @@ export interface IChat extends Document {
     text: string;
     sender: string;
   };
+
   createdAt: Date;
   updatedAt: Date;
 }
+
 const schema: Schema<IChat> = new Schema(
   {
     users: [{ type: String, required: true }],
@@ -17,6 +19,9 @@ const schema: Schema<IChat> = new Schema(
       sender: String,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
-export const Chat = mongoose.model<IChat>("chat", schema);
+
+export const Chat = mongoose.model<IChat>("Chat", schema);
